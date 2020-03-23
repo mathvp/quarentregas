@@ -25,17 +25,25 @@
       content-class="bg-grey-1"
     >
       <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
+        <q-item-label header class="text-grey">
+          Menu
         </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+        <q-item clickable tag="a" :to="{ name: 'index' }" exact>
+          <q-item-section avatar>
+            <q-icon name="las la-home" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Início</q-item-label>
+          </q-item-section>
+        </q-item>
+        <q-item clickable tag="a" :to="{ name: 'add' }" exact>
+          <q-item-section avatar>
+            <q-icon name="las la-plus-circle" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Postar Anúncio</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -46,26 +54,11 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink'
-
 export default {
   name: 'MainLayout',
-
-  components: {
-    EssentialLink
-  },
-
   data () {
     return {
-      leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: 'Docs',
-          caption: 'quasar.dev',
-          icon: '',
-          link: 'https://quasar.dev'
-        }
-      ]
+      leftDrawerOpen: false
     }
   }
 }
