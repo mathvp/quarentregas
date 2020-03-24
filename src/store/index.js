@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // import example from './module-example'
+import categories from './categories'
+import business from './business'
 
 Vue.use(Vuex)
 
@@ -17,7 +19,8 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      categories,
+      business
     },
 
     // enable strict mode (adds overhead!)

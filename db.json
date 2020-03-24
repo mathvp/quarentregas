@@ -1,0 +1,85 @@
+{
+  "business" : {
+    "business1" : {
+      "name": "MC Donald's Bragança",
+      "description": "Maior rede de Fast-Food do Mundo",
+      "category": "Lanchonete",
+      "tel": "(11) 97529-7752",
+      "whatsapp": "(11) 97529-7752",
+      "logoURL": "https://imagensemoldes.com.br/wp-content/uploads/2018/03/Mc-Donald%C2%B4s-Logo-Vetor-PNG.png",
+      "photoURL": "https://assets.b9.com.br/wp-content/uploads/2019/04/pulls-artificil-preservatives-burgers.jpg",
+      "facebookURL": "https://www.facebook.com/McDonaldsBrasil/",
+      "instagramURL": "https://www.instagram.com/mcdonalds_br/?hl=pt-br",
+      "siteURL": "www.mcdonalds.com.br",
+      "city": "Bragança Paulista",
+      "state": "SP",
+      "cep": "12900-351",
+      "owner": "Matheus Vieira",
+      "email": "matheusvieiradepaula@gmail.com",
+      "document": "421.945.238-98",
+      "status": 1
+    }
+  },
+  "categories" : {
+    "category1" : {
+      "name" : "Álcool em Gel"
+    },
+    "category10" : {
+      "name" : "Hortifruti"
+    },
+    "category11" : {
+      "name" : "Lanches"
+    },
+    "category12" : {
+      "name" : "Mercado"
+    },
+    "category13" : {
+      "name" : "Religioso"
+    },
+    "category14" : {
+      "name" : "Restaurante / Marmitex"
+    },
+    "category15" : {
+      "name" : "Padaria"
+    },
+    "category16" : {
+      "name" : "Pets"
+    },
+    "category17" : {
+      "name" : "Pizzaria"
+    },
+    "category18" : {
+      "name" : "Prod. de Limpeza"
+    },
+    "category19" : {
+      "name" : "Voluntário"
+    },
+    "category2" : {
+      "name" : "Máscaras"
+    },
+    "category20" : {
+      "name" : "Outros"
+    },
+    "category3" : {
+      "name" : "Aulas / Cursos Online"
+    },
+    "category4" : {
+      "name" : "Bebidas"
+    },
+    "category5" : {
+      "name" : "Doces"
+    },
+    "category6" : {
+      "name" : "Comidas Orientais"
+    },
+    "category7" : {
+      "name" : "Esfiharia"
+    },
+    "category8" : {
+      "name" : "Farmácia"
+    },
+    "category9" : {
+      "name" : "Gás e Água"
+    }
+  }
+}

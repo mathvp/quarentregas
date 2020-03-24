@@ -88,7 +88,6 @@
 
     <q-card-actions align="right">
       <q-btn v-close-popup flat color="primary" label="Fechar" />
-      <q-btn v-close-popup color="primary" icon="las la-bookmark" label="Salvar em Favoritos"/>
     </q-card-actions>
   </q-card>
 </template>

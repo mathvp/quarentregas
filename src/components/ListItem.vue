@@ -20,7 +20,7 @@
       </q-item-section>
 
     </q-item>
-    <q-separator />
+    <q-separator inset="item" />
   </div>
 </template>
 

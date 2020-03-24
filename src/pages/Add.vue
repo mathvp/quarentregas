@@ -18,7 +18,7 @@
               <q-input
                 outlined
                 v-model="name"
-                label="Título"
+                label="Nome do seu Negócio ou Produto"
                 :rules="[val => !!val || 'Campo obrigatório']"
                 hint="Ex.: Mc Donald's" />
             </div>
@@ -80,12 +80,15 @@
               <q-select
                 outlined
                 v-model="selectedCategory"
-                :options="categories"
+                :options="categoriesArray"
                 clearable
                 :rules="[val => !!val || 'Campo obrigatório']"
                 label="Categoria" />
             </div>
-            <div class="q-mt-lg">
+            <div class="q-mt-lg text-subtitle1">
+              Dados do Responsável
+            </div>
+            <div class="q-mt-md">
               <q-input
                 outlined
                 v-model="owner"
@@ -189,14 +192,14 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   data () {
     return {
       step: 1,
+      name: null,
       description: null,
-      categories: [
-        'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
-      ],
       selectedCategory: null,
       tel: null,
       whatsapp: null,
@@ -212,11 +215,18 @@ export default {
       document: null
     }
   },
+  computed: {
+    ...mapGetters('categories', ['categoriesArray'])
+  },
   methods: {
     isEmailValid (email) {
       email = email.toString()
       return (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    }
+    },
+    ...mapActions('categories', ['fbReadCategoriesData'])
+  },
+  created () {
+    this.fbReadCategoriesData()
   }
 }
 </script>
