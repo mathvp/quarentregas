@@ -1,5 +1,8 @@
 <template>
   <q-card class="my-card" style="width: 700px; max-width: 80vw;">
+    <template>
+      <slot name="header"></slot>
+    </template>
     <q-img :src="getPhotoUrl()" />
     <q-card-section>
       <div class="col no-wrap items-center">
@@ -86,8 +89,8 @@
 
     <q-separator />
 
-    <q-card-actions align="right">
-      <q-btn v-close-popup flat color="primary" label="Fechar" />
+    <q-card-actions>
+      <slot name="actions"></slot>
     </q-card-actions>
   </q-card>
 </template>
@@ -102,8 +105,13 @@ export default {
       return number.replace(/[^0-9]/g, '')
     },
     getPhotoUrl () {
-      const defaultImgUrl = 'https://cdn.dribbble.com/users/208061/screenshots/2790412/all-icon-full-blue.png'
-      return this.business.photoURL || defaultImgUrl
+      let imgUrl = this.business.photoURL
+
+      if (!imgUrl || imgUrl === '' || imgUrl === null || imgUrl === undefined) {
+        imgUrl = 'https://cdn.dribbble.com/users/208061/screenshots/2790412/all-icon-full-blue.png'
+      }
+
+      return imgUrl
     }
   }
 }

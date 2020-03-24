@@ -10,7 +10,7 @@
           v-for="(business, key) in this.businessArray"
           :key="key"
           :business="business"
-          @showModal="showBusinnesDetails(business)"
+          @showModal="showBusinnesDetails(business.id)"
           />
       </q-list>
     </q-card-section>
@@ -31,7 +31,13 @@
       flat
       v-ripple
       v-close-popup />
-      <business-details :business="activeBusiness" />
+      <business-details :business="activeBusiness">
+        <template v-slot:actions>
+          <div class="full-width flex justify-end">
+            <q-btn v-close-popup flat color="primary" label="Fechar" />
+          </div>
+        </template>
+      </business-details>
     </q-dialog>
   </q-card>
 </template>
@@ -39,6 +45,8 @@
 <script>
 import ListItem from './ListItem'
 import BusinessModal from './BusinessModal'
+import { mapActions, mapGetters } from 'vuex'
+// import business from '../store/business'
 
 export default {
   props: {
@@ -51,10 +59,17 @@ export default {
       showBusinessModal: false
     }
   },
+  computed: {
+    ...mapGetters('business', ['getBusiness'])
+  },
   methods: {
-    showBusinnesDetails (business) {
-      Object.assign(this.activeBusiness, business)
-      this.showBusinessModal = true
+    ...mapActions('business', ['loadBusiness']),
+    async showBusinnesDetails (businessId) {
+      await this.loadBusiness(businessId)
+      this.$nextTick(function () {
+        Object.assign(this.activeBusiness, this.getBusiness)
+        this.showBusinessModal = true
+      })
     }
   },
   components: {

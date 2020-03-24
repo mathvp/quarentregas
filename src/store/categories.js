@@ -19,31 +19,12 @@ const mutations = {
 
 const actions = {
   async fbReadCategoriesData ({ commit }) {
-    // const categoriesRef = firebaseDb.ref('/categories')
-
-    // categoriesRef.once('value').then((snapshot) => {
-    //   const categories = snapshot.val()
-    //   const payload = {
-    //     id: 'data',
-    //     categories
-    //   }
-    //   commit('addCategories', payload)
-    // })
     const snapshot = await firebaseDb.collection('categories').get()
     const payload = {
       id: 'data',
       categories: snapshot.docs.map(doc => doc.data())
     }
     commit('addCategories', payload)
-    // return snapshot.docs.map(doc => doc.data());
-    // firebaseDb.collection('business').get().then(doc => {
-    //   const categories = doc.data()
-    //   const payload = {
-    //     id: 'data',
-    //     categories
-    //   }
-    //   commit('addCategories', payload)
-    // })
   }
 }
 

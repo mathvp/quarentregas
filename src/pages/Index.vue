@@ -35,6 +35,7 @@ export default {
   created () {
     this.businessFromCategory('Lanchonete')
     this.businessFromCategory('Aulas Online')
+    this.businessFromCategory('Farmácia')
   }
 }
 </script>
