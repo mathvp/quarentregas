@@ -1,10 +1,21 @@
 <template>
-  <q-card class="my-card" style="width: 700px; max-width: 80vw;">
+  <q-card class="business-card" style="width: 700px; max-width: 80vw;">
     <template>
       <slot name="header"></slot>
     </template>
-    <q-img :src="getPhotoUrl()" />
-    <q-card-section>
+    <q-img class="featured-img" :src="getPhotoUrl()" />
+    <q-card-section
+      class="q-pa-none flex justify-center"
+      style="transform: translateY(-55%)">
+      <q-avatar
+        font-size="52px"
+        color="primary"
+        text-color="white"
+        class="bordered">
+        <img :src="getBusinessAvatar()">
+      </q-avatar>
+    </q-card-section>
+    <q-card-section class="business-name">
       <div class="col no-wrap items-center">
         <div class="col text-h6 ellipsis">
           {{business.name}}
@@ -112,11 +123,44 @@ export default {
       }
 
       return imgUrl
+    },
+    getBusinessAvatar () {
+      if (this.business.logoURL) {
+        return this.business.logoURL
+      }
+
+      return `https://ui-avatars.com/api/?background=4527a0&color=fff&name=${this.business.name}`
     }
   }
 }
 </script>
 
 <style>
-
+  .business-card .featured-img::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 50%, rgba(48,48,48,0.5) 100%);
+  }
+  .business-card .q-avatar {
+    width:175px;
+    height: 175px;
+  }
+  .business-card .business-name {
+    margin-top: -100px;
+  }
+  .q-avatar.bordered .q-avatar__content {
+    border: 8px solid rgba(255, 255, 255, .5);
+  }
+  @media screen and (max-width: 600px) {
+    .business-card .q-avatar {
+      width:100px;
+      height: 100px;
+    }
+    .business-card .business-name {
+      margin-top: -70px;
+    }
+  }
 </style>
