@@ -2,15 +2,21 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/NewLayout.vue'),
     children: [
       {
         path: '',
         name: 'index',
         component: () => import('pages/Index.vue')
-      },
+      }
+    ]
+  },
+  {
+    path: '/anunciar',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
       {
-        path: '/anunciar',
+        path: '',
         name: 'add',
         component: () => import('pages/Add.vue')
       }

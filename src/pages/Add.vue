@@ -1,12 +1,27 @@
 <template>
   <q-page>
     <div class="column">
+      <q-breadcrumbs class="q-px-md q-py-lg">
+        <q-breadcrumbs-el :to="{ name: 'index' }" label="Início" />
+        <q-breadcrumbs-el label="Postar Anúncio" />
+      </q-breadcrumbs>
+      <div class="q-px-md q-pb-lg">
+        <div class="text-h6">
+          Cadastrar Anúncio
+        </div>
+        <p>
+          Divulgue gratuitamente seu negócio ou produto aqui, com as suas informações de contato.<br />
+          Obs.: Serão aceitos apenas anúncios de acordo com as políticas de combate ao <strong>Coronavírus</strong>,
+          como Delivery, Aulas online, Voluntários, Doações, Mercados, Farmácias, etc...
+        </p>
+      </div>
       <q-form>
         <q-stepper
           v-model="step"
           vertical
           color="primary"
           animated
+          class="q-pb-xl"
         >
           <q-step
             :name="1"
@@ -174,6 +189,7 @@
             :name="3"
             title="Redes Sociais"
             icon="lab la-facebook"
+            class="q-mb-xl"
           >
             <div class="q-mt-lg">
               <q-input
@@ -205,6 +221,14 @@
               <q-btn @click="previewBusiness" color="primary" class="q-px-md" label="Continuar" />
             </q-stepper-navigation>
           </q-step>
+          <q-separator spaced />
+          <q-btn
+            label="Cancelar"
+            :to="{ name: 'index' }"
+            outline
+            icon="las la-long-arrow-alt-left"
+            color="primary"
+            class="q-ml-lg q-mb-xl q-mt-md" />
         </q-stepper>
       </q-form>
     </div>
@@ -313,7 +337,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

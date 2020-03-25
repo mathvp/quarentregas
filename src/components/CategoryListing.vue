@@ -1,7 +1,7 @@
 <template>
   <q-card class="column">
     <q-card-section>
-      <div class="text-h6">{{title}}</div>
+      <div class="text-h6 text-italic">{{title}}</div>
     </q-card-section>
 
     <q-card-section>
