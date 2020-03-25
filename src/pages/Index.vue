@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column q-pa-md">
+  <q-page class="column q-pa-md q-mb-xl q-pb-xl">
     <q-banner rounded class="bg-primary text-white q-mt-sm">
       Quarentregas é um app grátis de anúncios de <strong>Delivery em Bragança Paulista</strong>, <strong>Aulas</strong> e <strong>Cursos Online</strong> ou qualquer outra atividade remota,
       durante o período de <strong>Quarentena do COVID-19</strong>.<br /><br />
