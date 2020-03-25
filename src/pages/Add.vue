@@ -286,9 +286,14 @@ export default {
       this.showPreviewModal = true
 
       this.$q.notify({
-        message: 'ATENÇÃO: Seu anúncio ainda não foi publicado, revise os dados abaixo e clique em Publicar',
-        type: 'info',
-        position: 'top'
+        message: `ATENÇÃO: Seu anúncio ainda não foi publicado,
+        revise os dados abaixo e clique em <strong>Publicar</strong>`,
+        type: 'warning',
+        position: 'top-right',
+        progress: true,
+        timeout: 7000,
+        multiLine: true,
+        html: true
       })
 
       if (this.temporaryImages.logo.url) {

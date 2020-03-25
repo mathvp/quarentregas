@@ -13,7 +13,9 @@
         />
 
         <q-toolbar-title>
-          Quarentregas
+          <router-link :to="{ name: 'index' }">
+            <q-img src="../assets/quarentregas_logo.svg" style="width:150px" />
+          </router-link>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
