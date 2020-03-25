@@ -14,6 +14,16 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-dialog
+      v-model="searchDialog"
+      persistent
+      maximized
+      transition-show="slide-up"
+      transition-hide="slide-down"
+    >
+      <search-form />
+    </q-dialog>
     <q-page-scroller id="actions-scroller" position="bottom" :scroll-offset="80" expand :offset="[0, 0]">
       <q-toolbar class="full-width bg-primary flex justify-center">
         <q-tabs
@@ -39,6 +49,7 @@
           <q-tab
             name="search"
             icon="las la-search"
+            @click="searchDialog = true"
             label="Buscar" />
         </q-tabs>
       </q-toolbar>
@@ -49,15 +60,18 @@
 
 <script>
 import CustomFooter from '../components/CustomFooter'
+import SearchForm from '../components/SearchForm'
 
 export default {
   data () {
     return {
-      tab: 'home'
+      tab: 'home',
+      searchDialog: false
     }
   },
   components: {
-    'custom-footer': CustomFooter
+    'custom-footer': CustomFooter,
+    'search-form': SearchForm
   }
 }
 </script>
