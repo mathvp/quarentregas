@@ -8,6 +8,11 @@ const routes = [
         path: '',
         name: 'index',
         component: () => import('pages/Index.vue')
+      },
+      {
+        path: 'categorias/listar/:id',
+        name: 'categoryListing',
+        component: () => import('pages/CategoryListing.vue')
       }
     ]
   },

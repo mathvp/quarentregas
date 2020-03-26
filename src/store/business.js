@@ -6,25 +6,6 @@ import firebase from '@firebase/app'
 const state = {
   business: {
     data: {
-      // business1: {
-      //   name: 'MC Donald\'s Bragança',
-      //   description: 'Maior rede de Fast-Food do Mundo',
-      //   category: 'Lanchonete',
-      //   tel: '(11) 97529-7752',
-      //   whatsapp: '(11) 97529-7752',
-      //   logoURL: 'https://imagensemoldes.com.br/wp-content/uploads/2018/03/Mc-Donald%C2%B4s-Logo-Vetor-PNG.png',
-      //   photoURL: 'https://assets.b9.com.br/wp-content/uploads/2019/04/pulls-artificil-preservatives-burgers.jpg',
-      //   facebookURL: 'https://www.facebook.com/McDonaldsBrasil/',
-      //   instagramURL: 'https://www.instagram.com/mcdonalds_br/?hl=pt-br',
-      //   siteURL: 'www.mcdonalds.com.br',
-      //   city: 'Bragança Paulista',
-      //   state: 'SP',
-      //   cep: '12900-351',
-      //   owner: 'Matheus Vieira',
-      //   email: 'matheusvieiradepaula@gmail.com',
-      //   document: '421.945.238-98',
-      //   status: 1
-      // }
     }
   },
   businessListing: {},
@@ -51,42 +32,36 @@ const mutations = {
   },
   addCurrentShowingBusiness (state, payload) {
     Vue.set(state.currentShowingBusiness, 'data', payload.business)
-    // state.currentShowingBusiness = Object.assign({}, payload.business)
+  },
+  clearCurrentBusinessListing (state) {
+    state.businessListing = Object.assign({}, {})
   }
 }
 
 const actions = {
-  fbReadBusinessData ({ commit }) {
-    // const businessRef = firebaseDb.ref('/business')
-
-    // businessRef.once('value').then((snapshot) => {
-    //   const business = snapshot.val()
-    //   const payload = {
-    //     id: 'data',
-    //     business
-    //   }
-    //   commit('addBusiness', payload)
-    // })
-
-  },
-  businessFromCategory ({ commit }, categoryId) {
+  businessFromCategory ({ commit }, queryParams) {
     commit('clearTemporaryImage')
+    commit('clearCurrentBusinessListing')
+
+    const categoryId = queryParams.category
+    const limit = queryParams.limit
 
     if (state.businessListing[categoryId]) {
       return
     }
 
-    firebaseDb.collection('businessListing').where('category', '==', categoryId)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const payload = {
-            id: categoryId,
-            business: doc.data()
-          }
-          commit('addBusinessListing', payload)
-        })
+    const ref = firebaseDb.collection('businessListing')
+    const query = limit ? ref.where('category', '==', categoryId).limit(limit) : ref.where('category', '==', categoryId)
+
+    query.get().then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        const payload = {
+          id: categoryId,
+          business: doc.data()
+        }
+        commit('addBusinessListing', payload)
       })
+    })
       .catch(error => {
         console.log('Error getting documents: ', error)
       })
@@ -118,6 +93,10 @@ const actions = {
     }
 
     const context = this
+
+    if (firebaseAuth.currentUser) {
+      console.log('Current User', firebaseAuth.currentUser)
+    }
 
     firebaseDb.collection('business').doc(payload.id).set(payload.business)
       .then(function () {

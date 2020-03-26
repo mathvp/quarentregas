@@ -9,10 +9,20 @@
     </q-banner>
     <category-listing
       v-for="(business, key) in this.businessListing"
-      :key="key"
+      :key="business.name + key"
       :title="key"
       :businessArray="getBusinessByCategory(key)"
-      class="q-my-lg" />
+      class="q-my-lg">
+      <template v-slot:actions>
+        <q-btn
+          outline
+          color="primary"
+          class="q-px-lg"
+          label="Ver tudo"
+          :to="{ name: 'categoryListing', params: { id: key } }"
+        />
+      </template>
+    </category-listing>
   </q-page>
 </template>
 
@@ -40,9 +50,19 @@ export default {
     ...mapState('business', ['businessListing'])
   },
   created () {
-    this.businessFromCategory('Lanchonete')
-    this.businessFromCategory('Aulas Online')
-    this.businessFromCategory('Farmácia')
+    this.businessFromCategory({
+      category: 'Lanchonete',
+      limit: 10
+    })
+
+    this.businessFromCategory({
+      category: 'Aulas Online',
+      limit: 10
+    })
+    this.businessFromCategory({
+      category: 'Farmácia',
+      limit: 10
+    })
   }
 }
 </script>

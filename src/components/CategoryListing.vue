@@ -18,7 +18,7 @@
     <q-separator dark />
 
     <q-card-actions class="justify-end">
-      <q-btn color="primary" outline class="q-px-lg">Ver tudo</q-btn>
+      <slot name="actions" />
     </q-card-actions>
     <q-dialog v-model="showBusinessModal">
       <q-btn
