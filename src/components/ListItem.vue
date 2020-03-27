@@ -7,7 +7,7 @@
       <q-item-section top avatar>
         <q-avatar
           color="white">
-          <img :src="getBusinessAvatar()">
+          <img :src="getBusinessAvatar()" />
         </q-avatar>
 
       </q-item-section>

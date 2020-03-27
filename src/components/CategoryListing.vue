@@ -3,7 +3,6 @@
     <q-card-section>
       <div class="text-h6 text-italic">{{title}}</div>
     </q-card-section>
-
     <q-card-section>
       <q-list>
         <list-item
@@ -22,15 +21,15 @@
     </q-card-actions>
     <q-dialog v-model="showBusinessModal">
       <q-btn
-      icon="las la-times-circle"
-      text-color="primary"
-      class="absolute-right close-btn"
-      style="z-index: 999; height: 60px; width: 60px; cursor:pointer"
-      size="lg"
-      round
-      flat
-      v-ripple
-      v-close-popup />
+        icon="las la-times-circle"
+        text-color="primary"
+        class="absolute-right close-btn"
+        style="z-index: 999; height: 60px; width: 60px; cursor:pointer"
+        size="lg"
+        round
+        flat
+        v-ripple
+        v-close-popup />
       <business-details :business="activeBusiness">
         <template v-slot:actions>
           <div class="full-width flex justify-end">

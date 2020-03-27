@@ -4,7 +4,15 @@
       <q-breadcrumbs-el :to="{ name: 'index' }" label="Início" />
       <q-breadcrumbs-el label="Listar Anúncios" />
     </q-breadcrumbs>
-
+    <q-inner-loading
+      class="text-primary"
+      :showing="!Object.keys(this.businessListing).length">
+      <q-spinner-facebook
+        color="primary"
+        size="4em"
+      />
+      Carregando...
+    </q-inner-loading>
     <category-listing
       v-for="(business, key) in this.businessListing"
       :key="key"
@@ -19,6 +27,7 @@
       icon="las la-long-arrow-alt-left"
       color="primary"
       class="q-ml-lg q-mb-xl q-mt-md" />
+    <br /><br /><br />
   </q-page>
 </template>
 

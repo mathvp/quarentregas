@@ -3,7 +3,10 @@
     <template>
       <slot name="header"></slot>
     </template>
-    <q-img class="featured-img" :src="getPhotoUrl()" />
+    <q-img
+      class="featured-img"
+      :src="getPhotoUrl()"
+      transition="jump-down" />
     <q-card-section
       class="q-pa-none flex justify-center"
       style="transform: translateY(-55%)">
@@ -12,7 +15,10 @@
         color="primary"
         text-color="white"
         class="bordered">
-        <img :src="getBusinessAvatar()">
+        <q-img
+          :src="getBusinessAvatar()"
+          transition="slide-up"
+          :ratio="1"/>
       </q-avatar>
     </q-card-section>
     <q-card-section class="business-name">

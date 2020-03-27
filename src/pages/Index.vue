@@ -51,6 +51,8 @@ export default {
   name: 'PageIndex',
   data () {
     return {
+      counter: [],
+      categoryIndex: []
     }
   },
   components: {
@@ -68,6 +70,9 @@ export default {
     ...mapState('business', ['businessListing']),
     ...mapState('categories', ['categories'])
   },
+  beforeCreate () {
+    this.$q.loading.show()
+  },
   async created () {
     await this.fbReadCategoriesData(true)
 
@@ -76,6 +81,11 @@ export default {
         category: category.name,
         limit: 10
       })
+    })
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.$q.loading.hide()
     })
   }
 }
