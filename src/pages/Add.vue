@@ -37,6 +37,7 @@
                 :rules="[val => !!val || 'Campo obrigatório']"
                 hint="Ex.: Mc Donald's"
                 @blur="createKeywords"
+                ref="businessName"
                 lazy-rules />
             </div>
             <div class="q-mt-lg">
@@ -46,17 +47,24 @@
                 v-model="businessToSubmit.logoFile"
                 label="Imagem Logo (Opcional)"
                 accept=".jpg, image/*"
+                ref="logoImg"
+                :error="imgErrors.logoImg"
+                error-message="Imagem inválida"
+                @focus="validateImg('logoImg')"
+                @blur="clearImgError('logoImg')"
                 @input="uploadImage('logo', businessToSubmit.logoFile)"
+                max-files="1"
+                :max-file-size="2200000"
                 counter>
                 <template v-slot:prepend>
                   <q-icon name="las la-image" @click.stop />
                 </template>
                 <template v-slot:append>
-                  <q-icon name="las la-times-circle" @click.stop="logoFile = null" class="cursor-pointer" />
+                  <q-icon size="lg" name="las la-times-circle" @click.prevent.stop="businessToSubmit.logoFile = null" class="cursor-pointer" />
                 </template>
 
                 <template v-slot:hint>
-                  O logotipo do seu negócio em .JPG, .JPEG ou .PNG
+                  Max. 2 MB. O logotipo do seu negócio em .JPG, .JPEG ou .PNG
                 </template>
               </q-file>
             </div>
@@ -68,16 +76,23 @@
                 @input="uploadImage('photo', businessToSubmit.photoFile)"
                 label="Foto Produtos (Opcional)"
                 accept=".jpg, image/*"
+                max-files="1"
+                :error="imgErrors.photoImg"
+                error-message="Imagem inválida"
+                ref="photoImg"
+                @focus="validateImg('photoImg')"
+                @blur="clearImgError('photoImg')"
+                :max-file-size="2500000"
                 counter>
                 <template v-slot:prepend>
                   <q-icon name="las la-camera-retro" @click.stop />
                 </template>
                 <template v-slot:append>
-                  <q-icon name="las la-times-circle" @click.stop="photoFile = null" class="cursor-pointer" />
+                  <q-icon size="lg" name="las la-times-circle" @click.prevent.stop="businessToSubmit.photoFile = null" class="cursor-pointer" />
                 </template>
 
                 <template v-slot:hint>
-                  Foto de algum produto em .JPG, .JPEG ou .PNG
+                  Max. 2 MB. Foto de algum produto em .JPG, .JPEG ou .PNG
                 </template>
               </q-file>
             </div>
@@ -105,6 +120,7 @@
                 label="Descrição"
                 :rules="[val => !!val || 'Campo obrigatório']"
                 hint="Descreva seus produtos ou serviços"
+                ref="businessDescription"
                 lazy-rules
               />
             </div>
@@ -116,6 +132,7 @@
                 clearable
                 :rules="[val => !!val || 'Campo obrigatório']"
                 label="Categoria"
+                ref="businessCategory"
                 lazy-rules />
             </div>
             <div class="q-mt-lg text-subtitle1">
@@ -128,6 +145,7 @@
                 label="Nome Responsável"
                 :rules="[val => !!val || 'Campo obrigatório']"
                 hint="Nome Completo"
+                ref="businessOwnerName"
                 lazy-rules />
             </div>
             <div class="q-mt-lg">
@@ -138,6 +156,7 @@
                 :rules="[val => !!val || 'Campo obrigatório',
                          val => isEmailValid(val) || 'Email inválido!' ]"
                 lazy-rules
+                ref="businessOwnerEmail"
                 hint="O email não será divulgado ao público" />
             </div>
             <div class="q-mt-lg">
@@ -148,11 +167,18 @@
                 :rules="[ val => !!val || 'Campo obrigatório',
                 val=> (val.length >= 11 && val.length <= 18) || 'CPF inválido' ]"
                 lazy-rules
+                ref="businessOwnerDocument"
                 hint="O documento não será divulgado ao público" />
             </div>
 
             <q-stepper-navigation class="q-gutter-md row justify-end">
-              <q-btn @click="step = 2" color="primary" class="q-px-md" label="Continuar" />
+              <q-btn
+                @click="validateFields(
+                  ['businessName', 'businessDescription', 'businessCategory', 'businessOwnerName', 'businessOwnerEmail', 'businessOwnerDocument'],
+                  2)"
+                color="primary"
+                class="q-px-md"
+                label="Continuar" />
             </q-stepper-navigation>
           </q-step>
 
@@ -182,7 +208,11 @@
             </div>
             <q-stepper-navigation class="q-gutter-md row justify-between">
               <q-btn flat @click="step = 1" color="primary" label="Voltar" class="q-ml-sm" />
-              <q-btn @click="step = 3" class="q-px-md" color="primary" label="Continuar" />
+              <q-btn
+                @click="step = 3"
+                class="q-px-md"
+                color="primary"
+                label="Continuar" />
             </q-stepper-navigation>
           </q-step>
 
@@ -285,7 +315,12 @@ export default {
         email: null,
         document: null,
         keywords: null
-      }
+      },
+      imgErrors: {
+        logoImg: false,
+        photoImg: false
+      },
+      hasErrors: false
     }
   },
   components: {
@@ -302,12 +337,35 @@ export default {
       email = email.toString()
       return (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     },
+    validateImg (refName) {
+      const element = this.$refs[refName]
+      this.imgErrors[refName] = !element.value
+    },
+    clearImgError (refName) {
+      this.imgErrors[refName] = false
+    },
     uploadImage (id, file) {
       const payload = {
         id,
         file
       }
       this.uploadImg(payload)
+    },
+    async validateFields (fieldsRefArray, nextStep) {
+      this.countErrors = 0
+
+      await fieldsRefArray.forEach(async (fieldRef) => {
+        const field = this.$refs[fieldRef]
+        await field.validate()
+        if (field.innerError) {
+          this.countErrors += 1
+          console.log(this.countErrors)
+        }
+      })
+
+      if (this.countErrors === 0) {
+        this.step = nextStep
+      }
     },
     previewBusiness () {
       this.showPreviewModal = true
