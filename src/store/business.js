@@ -238,8 +238,6 @@ const getters = {
       return []
     }
 
-    console.log(state.businessListing[categoryId])
-
     return Object.values(state.businessListing[categoryId])
   },
   getBusiness: state => {

@@ -14,12 +14,18 @@ const state = {
 const mutations = {
   addCategories (state, payload) {
     Vue.set(state.categories, payload.id, payload.categories)
+  },
+  clearCategories (state) {
+    state.categories = Object.assign({}, {})
   }
 }
 
 const actions = {
-  async fbReadCategoriesData ({ commit }) {
-    const snapshot = await firebaseDb.collection('categories').get()
+  async fbReadCategoriesData ({ commit }, queryParams) {
+    await commit('clearCategories')
+    const ref = firebaseDb.collection('categories')
+    const query = queryParams !== undefined && queryParams ? ref.where('showAtHome', '==', true).orderBy('order') : ref
+    const snapshot = await query.get()
     const payload = {
       id: 'data',
       categories: snapshot.docs.map(doc => doc.data())
