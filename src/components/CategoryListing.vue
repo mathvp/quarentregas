@@ -46,7 +46,6 @@
 import ListItem from './ListItem'
 import BusinessModal from './BusinessModal'
 import { mapActions, mapGetters } from 'vuex'
-// import business from '../store/business'
 
 export default {
   props: {

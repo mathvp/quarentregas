@@ -10,7 +10,10 @@ const state = {
   },
   businessListing: {},
   temporaryImages: {},
-  currentShowingBusiness: {}
+  currentShowingBusiness: {},
+  searchBusinessListing: {
+    data: {}
+  }
 }
 
 const mutations = {
@@ -35,6 +38,9 @@ const mutations = {
   },
   clearCurrentBusinessListing (state) {
     state.businessListing = Object.assign({}, {})
+  },
+  addSearchBusinessListing (state, data) {
+    Vue.set(state.searchBusinessListing, 'data', data)
   }
 }
 
@@ -69,6 +75,9 @@ const actions = {
   async addBusiness ({ commit, dispatch }, business) {
     const businessId = uid()
 
+    const cleanPhotoURL = !state.temporaryImages.photo ? '' : state.temporaryImages.photo.url
+    const cleanLogoURL = !state.temporaryImages.logo ? '' : state.temporaryImages.logo.url
+
     const payload = {
       id: businessId,
       business: {
@@ -77,8 +86,8 @@ const actions = {
         category: business.selectedCategory,
         tel: business.tel,
         whatsapp: business.whatsapp,
-        logoURL: state.temporaryImages.logo.url || '',
-        photoURL: state.temporaryImages.photo.url || '',
+        logoURL: cleanLogoURL || '',
+        photoURL: cleanPhotoURL || '',
         facebookURL: business.facebookURL,
         instagramURL: business.instagramURL,
         siteURL: business.siteURL,
@@ -86,38 +95,47 @@ const actions = {
         state: 'SP',
         cep: '',
         owner: business.owner,
+        ownerId: '',
         email: business.email,
         document: business.document,
         status: 0
-      }
+      },
+      keywords: business.keywords
     }
 
     const context = this
 
-    if (firebaseAuth.currentUser) {
-      console.log('Current User', firebaseAuth.currentUser)
+    if (!firebaseAuth.currentUser) {
+      firebaseAuth.signInAnonymously()
     }
 
-    firebaseDb.collection('business').doc(payload.id).set(payload.business)
-      .then(function () {
-        Dialog.create({
-          title: 'Tudo certo',
-          message: 'O anúncio foi enviado para aprovação e será publicado em breve! Obrigado!',
-          color: 'positive'
-        })
-        commit('addBusiness', payload)
-        dispatch('addBusinessListing', payload)
-        context.$router.push({ name: 'index' })
-      })
-      .catch(function () {
-        Dialog.create({
-          title: 'Erro!',
-          message: 'Não foi possível enviar seu anúncio...',
-          color: 'warning'
-        })
-      })
+    await firebaseAuth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        return
+      }
 
-    commit('clearTemporaryImage')
+      payload.business.ownerId = user.uid
+
+      await firebaseDb.collection('business').doc(payload.id).set(payload.business)
+        .then(function () {
+          Dialog.create({
+            title: 'Tudo certo',
+            message: 'O anúncio foi enviado para aprovação e será publicado em breve! Obrigado!',
+            color: 'positive'
+          })
+          commit('addBusiness', payload)
+          dispatch('addBusinessListing', payload)
+          context.$router.push({ name: 'index' })
+        })
+        .catch(function () {
+          Dialog.create({
+            title: 'Erro!',
+            message: 'Não foi possível enviar seu anúncio...',
+            color: 'warning'
+          })
+        })
+      commit('clearTemporaryImage')
+    })
   },
   uploadImg ({ commit }, payload) {
     firebaseAuth.signInAnonymously()
@@ -160,15 +178,25 @@ const actions = {
       logoURL: payload.business.logoURL || '',
       name: payload.business.name,
       description: payload.business.description,
-      category: payload.business.category
+      category: payload.business.category,
+      keywords: payload.keywords
     }
-    firebaseDb.collection('businessListing').doc(payload.id).set(businessForListing)
-      .then(function () {
-        console.log('Document successfully written!')
-      })
-      .catch(function (error) {
-        console.error('Error writing document: ', error)
-      })
+
+    firebaseAuth.signInAnonymously()
+
+    firebaseAuth.onAuthStateChanged((user) => {
+      if (!user) {
+        return
+      }
+
+      firebaseDb.collection('businessListing').doc(payload.id).set(businessForListing)
+        .then(function () {
+          console.log('Document successfully written!')
+        })
+        .catch(function (error) {
+          console.error('Error writing document: ', error)
+        })
+    })
   },
   async loadBusiness ({ commit }, businessId) {
     await firebaseDb.collection('business').doc(businessId)
@@ -180,6 +208,24 @@ const actions = {
         }
         await commit('addCurrentShowingBusiness', payload)
       })
+      .catch(error => {
+        console.log('Error getting documents: ', error)
+      })
+  },
+  async loadBusinessForSearch ({ commit }, queryParams) {
+    if (state.searchBusinessListing.data && Object.keys(state.searchBusinessListing.data).length) {
+      return
+    }
+
+    const ref = firebaseDb.collection('businessListing')
+
+    await ref.get().then(querySnapshot => {
+      const searchData = []
+      querySnapshot.forEach(doc => {
+        searchData.push(doc.data())
+      })
+      commit('addSearchBusinessListing', searchData)
+    })
       .catch(error => {
         console.log('Error getting documents: ', error)
       })

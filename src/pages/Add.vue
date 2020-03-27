@@ -36,6 +36,7 @@
                 label="Nome do seu Negócio ou Produto"
                 :rules="[val => !!val || 'Campo obrigatório']"
                 hint="Ex.: Mc Donald's"
+                @blur="createKeywords"
                 lazy-rules />
             </div>
             <div class="q-mt-lg">
@@ -258,6 +259,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import BusinessModal from '../components/BusinessModal'
+import { generateKeywords } from '../statics/js/generateKeywords'
 
 export default {
   data () {
@@ -281,7 +283,8 @@ export default {
         state: 'SP',
         owner: null,
         email: null,
-        document: null
+        document: null,
+        keywords: null
       }
     }
   },
@@ -320,16 +323,21 @@ export default {
         html: true
       })
 
-      if (this.temporaryImages.logo.url) {
+      if (this.temporaryImages.logo) {
         this.businessToSubmit.logoURL = this.temporaryImages.logo.url
       }
 
-      if (this.temporaryImages.photo.url) {
+      if (this.temporaryImages.photo) {
         this.businessToSubmit.photoURL = this.temporaryImages.photo.url
       }
     },
     submitBusiness () {
       this.addBusiness(this.businessToSubmit)
+    },
+    createKeywords () {
+      const sentence = this.businessToSubmit.name || ''
+
+      this.businessToSubmit.keywords = generateKeywords(sentence) || ''
     }
   },
   created () {
