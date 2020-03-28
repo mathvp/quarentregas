@@ -24,7 +24,7 @@ const actions = {
   async fbReadCategoriesData ({ commit }, queryParams) {
     await commit('clearCategories')
     const ref = firebaseDb.collection('categories')
-    const query = queryParams !== undefined && queryParams ? ref.where('showAtHome', '==', true).orderBy('order') : ref
+    const query = queryParams !== undefined && queryParams ? ref.where('showAtHome', '==', true).orderBy('order') : ref.orderBy('name')
     const snapshot = await query.get()
     const payload = {
       id: 'data',

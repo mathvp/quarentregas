@@ -228,6 +228,9 @@
                 type="url"
                 v-model="businessToSubmit.facebookURL"
                 label="Link Página Facebook (Opcional)"
+                :rules="[val => isValidUrl(val) || 'Link inválido!',
+                         val => isValidFacebookUrl(val) || 'Informe uma URL do Facebook']"
+                lazy-rules
                 hint="Ex.: https://www.facebook.com/facebook" />
             </div>
             <div class="q-mt-lg">
@@ -236,6 +239,9 @@
                 type="url"
                 v-model="businessToSubmit.instagramURL"
                 label="Link Instagram (Opcional)"
+                :rules="[val => isValidUrl(val) || 'Link inválido!',
+                         val => isValidInstagramUrl(val) || 'Informe uma URL do Instagram']"
+                lazy-rules
                 hint="Ex.: https://www.instagram.com/instagram/" />
             </div>
             <div class="q-mt-lg q-mb-lg">
@@ -244,6 +250,7 @@
                 type="url"
                 v-model="businessToSubmit.siteURL"
                 label="Link seu Site (Opcional)"
+                :rules="[val => isValidUrl(val) || 'Link inválido!']"
                 hint="Ex.: http://www.suaempresa.com.br" />
             </div>
             <q-separator spaced/>
@@ -359,7 +366,6 @@ export default {
         await field.validate()
         if (field.innerError) {
           this.countErrors += 1
-          console.log(this.countErrors)
         }
       })
 
@@ -396,6 +402,18 @@ export default {
       const sentence = this.businessToSubmit.name || ''
 
       this.businessToSubmit.keywords = generateKeywords(sentence) || ''
+    },
+    isValidUrl (url) {
+      const regex = new RegExp(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/)
+      return regex.test(url)
+    },
+    isValidFacebookUrl (url) {
+      const regex = new RegExp(/(http(s)?:\/\/.)?(www\.)?(m\.)?((facebook|fb))\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/)
+      return regex.test(url)
+    },
+    isValidInstagramUrl (url) {
+      const regex = new RegExp(/(http(s)?:\/\/.)?(www\.)?(m\.)?((instagram))\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/)
+      return regex.test(url)
     }
   },
   created () {
