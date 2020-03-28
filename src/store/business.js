@@ -59,7 +59,7 @@ const actions = {
     const ref = firebaseDb.collection('businessListing')
     const query = limit ? ref.where('category', '==', categoryId).limit(limit) : ref.where('category', '==', categoryId)
 
-    query.get().then(querySnapshot => {
+    query.where('status', '==', 1).get().then(querySnapshot => {
       querySnapshot.forEach(doc => {
         const payload = {
           id: categoryId,
@@ -97,8 +97,7 @@ const actions = {
         owner: business.owner,
         ownerId: '',
         email: business.email,
-        document: business.document,
-        status: 0
+        document: business.document
       },
       keywords: business.keywords
     }
@@ -181,7 +180,8 @@ const actions = {
       name: payload.business.name,
       description: payload.business.description,
       category: payload.business.category,
-      keywords: payload.keywords
+      keywords: payload.keywords,
+      status: 0
     }
 
     if (!firebaseAuth.currentUser) {
@@ -223,7 +223,7 @@ const actions = {
 
     const ref = firebaseDb.collection('businessListing')
 
-    await ref.get().then(querySnapshot => {
+    await ref.where('status', '==', 1).get().then(querySnapshot => {
       const searchData = []
       querySnapshot.forEach(doc => {
         searchData.push(doc.data())
