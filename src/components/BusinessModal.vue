@@ -170,7 +170,7 @@ export default {
       let imgUrl = this.business.photoURL
 
       if (!imgUrl || imgUrl === '' || imgUrl === null || imgUrl === undefined) {
-        imgUrl = 'https://cdn.dribbble.com/users/208061/screenshots/2790412/all-icon-full-blue.png'
+        imgUrl = 'https://firebasestorage.googleapis.com/v0/b/quarentregas.appspot.com/o/do-not-remove%2Fpattern-bg.jpg?alt=media&token=fc86e96e-77b3-4a62-b3e7-713c74949d25'
       }
 
       return imgUrl
