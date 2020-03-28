@@ -30,7 +30,7 @@
         flat
         v-ripple
         v-close-popup />
-      <business-details :business="activeBusiness">
+      <business-details :business="activeBusiness" :id="businessId">
         <template v-slot:actions>
           <div class="full-width flex justify-end">
             <q-btn v-close-popup flat color="primary" label="Fechar" />
@@ -54,7 +54,8 @@ export default {
   data () {
     return {
       activeBusiness: {},
-      showBusinessModal: false
+      showBusinessModal: false,
+      businessId: ''
     }
   },
   computed: {
@@ -63,6 +64,7 @@ export default {
   methods: {
     ...mapActions('business', ['loadBusiness']),
     async showBusinnesDetails (businessId) {
+      this.businessId = businessId
       await this.loadBusiness(businessId)
       this.$nextTick(function () {
         Object.assign(this.activeBusiness, this.getBusiness)

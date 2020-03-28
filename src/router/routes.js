@@ -26,6 +26,18 @@ const routes = [
         component: () => import('pages/Add.vue')
       }
     ]
+  },
+  {
+    path: '/denunciar',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: ':id/:name',
+        props: true,
+        name: 'reportBusiness',
+        component: () => import('pages/Report.vue')
+      }
+    ]
   }
 ]
 

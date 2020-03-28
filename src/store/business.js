@@ -138,7 +138,9 @@ const actions = {
     })
   },
   uploadImg ({ commit }, payload) {
-    firebaseAuth.signInAnonymously()
+    if (!firebaseAuth.currentUser) {
+      firebaseAuth.signInAnonymously()
+    }
 
     firebaseAuth.onAuthStateChanged((user) => {
       if (!user) {
@@ -182,7 +184,9 @@ const actions = {
       keywords: payload.keywords
     }
 
-    firebaseAuth.signInAnonymously()
+    if (!firebaseAuth.currentUser) {
+      firebaseAuth.signInAnonymously()
+    }
 
     firebaseAuth.onAuthStateChanged((user) => {
       if (!user) {
@@ -229,6 +233,36 @@ const actions = {
       .catch(error => {
         console.log('Error getting documents: ', error)
       })
+  },
+  async businessReport (obj, payload) {
+    if (!firebaseAuth.currentUser) {
+      firebaseAuth.signInAnonymously()
+    }
+
+    firebaseAuth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        return
+      }
+
+      const context = this
+
+      await firebaseDb.collection('reports').add(payload)
+        .then(function () {
+          Dialog.create({
+            title: 'Tudo certo',
+            message: 'Sua denúncia foi enviada! Iremos analisar e tomar as medidas o mais breve possível. Obrigado!',
+            color: 'positive'
+          })
+          context.$router.push({ name: 'index' })
+        })
+        .catch(function () {
+          Dialog.create({
+            title: 'Erro!',
+            message: 'Não foi possível enviar sua denúncia...',
+            color: 'warning'
+          })
+        })
+    })
   }
 }
 
